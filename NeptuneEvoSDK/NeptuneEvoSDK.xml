@@ -1,0 +1,325 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NeptuneEvoSDK</name>
+    </assembly>
+    <members>
+        <member name="P:Redage.SDK.ColShapeData.SID">
+            <summary>
+            StringID телепорта в базе данных и ключ к dictionary
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.Fraction">
+            <summary>
+            Доступ для фракций, 0 = для всех фракций и гражданских
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.Rank">
+            <summary>
+            Доступ для рангов с определённого ранга и выше
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.FromPos">
+            <summary>
+            Позиция X Y Z откуда идёт первый телепорт
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.FromDim">
+            <summary>
+            Номер Dimension откуда идёт первый телепорт
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.ToPos">
+            <summary>
+            Позиция X Y Z куда телепортирует первый телепорт и, если что, позиция второго телепорта, если Revers = 1
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.ToDim">
+            <summary>
+            Номер Dimension в который телепортируется игрок, и, если что, номер dimension с которого действует второй маркер, если Revers = 1
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.Revers">
+            <summary>
+            false - телепорт только со стороны FromPos на ToPos, если true, то 2 телепорта, один с FromPos до ToPos, второй с ToPos до FromPos
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.ForVeh">
+            <summary>
+            false- телепорт не действует на машину, если true - действует.
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapeData.Interact">
+            <summary>
+            false - отключить обработку нажатия на кнопку E на первой точке, true - включить
+            </summary>
+        </member>
+        <member name="T:Redage.SDK.ColShapes">
+            <summary>
+            Новый контроллер колшейпов
+            Принцип сохранения и загрузки точек аналогичен SDK.Configuration.
+            [RemoteEvent("ColShapeInteract")]
+            Подписка на событие взаимодействия игрока с чекпоинтом SID
+            </summary>
+        </member>
+        <member name="M:Redage.SDK.ColShapes.#ctor(System.Boolean,System.String)">
+            <summary>
+            Получаем список всех колшейпов из базы данных
+            </summary>
+            <param name="sqlite_">Работа с данными из SQLite или MySQL</param>
+            <param name="category_">Категория. Null = Общая для всего мода.</param>
+        </member>
+        <member name="M:Redage.SDK.ColShapes.Reload">
+            <summary>
+            Перезагрузка всех точек из базы данных 
+            </summary>
+        </member>
+        <member name="M:Redage.SDK.ColShapes.CheckTeleportAccess(GTANetworkAPI.Client,System.String)">
+            <summary>
+            Проверить доступ к телепорту
+            </summary>
+            <param name="player">Игрок, которого проверяем</param>
+            <param name="sid">StringID телепорта</param>
+            <returns>True - Доступ есть</returns>
+        </member>
+        <member name="M:Redage.SDK.ColShapes.Save(System.String)">
+            <summary>
+            Сохранить данные телепорта в БД
+            </summary>
+            <param name="sid">StringID телепорта</param>
+            <returns>True - если данные были обновлены</returns>
+        </member>
+        <member name="M:Redage.SDK.ColShapes.Create(Redage.SDK.ColShapeData)">
+            <summary>
+            Создать новую точку
+            </summary>
+            <param name="data">Данные точки</param>
+            <returns>True - если точка была создана</returns>
+        </member>
+        <member name="M:Redage.SDK.ColShapes.GetEnumerator">
+            <summary>
+            Вернет список данных всех точек
+            </summary>
+        </member>
+        <member name="P:Redage.SDK.ColShapes.Item(System.String)">
+            <summary>
+            Получить/установить ColShapeData по StringID
+            </summary>
+            <param name="sid">StringId Точки</param>
+        </member>
+        <member name="M:Redage.SDK.Config.#ctor(System.String)">
+            <summary>
+            Инициализация. Требуется во всех местах, где будут использоваться конфиги.
+            </summary>
+            <param name="category_">Идентификатор группы конфигов</param>
+        </member>
+        <member name="M:Redage.SDK.Config.Set(System.String,System.Object)">
+            <summary>
+            Устанавливает значение в конфиг или создает новый
+            </summary>
+            <param name="param">Название параметра конфигурации</param>
+            <param name="value">Значение параметра</param>
+        </member>
+        <member name="M:Redage.SDK.Config.Get(System.String)">
+            <summary>
+            Получает значение параметра по названию. Вернет объект или Null.
+            </summary>
+            <param name="param">Название параметра конфигурации</param>
+            <returns>Возвращает объект для дальнейшей конвертации. Если параметр не найден, вернет null.</returns>
+        </member>
+        <member name="M:Redage.SDK.Config.TryGet``1(System.String,System.Object)">
+            <summary>
+            Пытается получить значение по названию параметра. Если параметр не найден, создает новый.
+            </summary>
+            <typeparam name="T">Тип, который вернется</typeparam>
+            <param name="param">Название параметра конфигурации</param>
+            <param name="_default">Значение по умолчанию для данного типа</param>
+            <returns>Возвращает найденый объект с указанным типом (T)</returns>
+        </member>
+        <member name="M:Redage.SDK.nLog.#ctor(System.String,System.Boolean)">
+            <summary>
+            Инициализация системы логирования
+            </summary>
+            <param name="reference">Зависимость - Пространство вызова лога, своя пометка в консоли</param>
+            <param name="canDebug">Включить или отключить вывод отладочных сообщений для всего пространства</param>
+        </member>
+        <member name="T:Redage.SDK.nLog.Type">
+            <summary>
+            Флаги (пометки) строк при выводе в консоль
+            </summary>
+        </member>
+        <member name="M:Redage.SDK.nLog.Write(System.String,Redage.SDK.nLog.Type)">
+            <summary>
+            Вывести в консоль обычный текст с нужным флагом
+            </summary>
+            <param name="text">Выводимый текст</param>
+            <param name="logType">Флаг. Указывает, как нужно пометить строку</param>
+        </member>
+        <member name="M:Redage.SDK.nLog.WriteAsync(System.String,Redage.SDK.nLog.Type)">
+            <summary>
+            Вывести в консоль обычный текст с нужным флагом асинхронно
+            </summary>
+            <param name="text"></param>
+            <param name="logType"></param>
+        </member>
+        <member name="M:Redage.SDK.nLog.Debug(System.String,Redage.SDK.nLog.Type)">
+            <summary>
+            Вывести в консоль отладочный текст с нужным флагом
+            </summary>
+            <param name="text">Выводимый текст</param>
+            <param name="logType">Флаг. Указывает, как нужно пометить строку</param>
+        </member>
+        <member name="M:Redage.SDK.nLog.DebugAsync(System.String,Redage.SDK.nLog.Type)">
+            <summary>
+            Вывести в консоль отладочный текст с нужным флагом асинхронно
+            </summary>
+            <param name="text">Выводимый текст</param>
+            <param name="logType">Флаг. Указывает, как нужно пометить строку</param>
+        </member>
+        <member name="M:Redage.SDK.MySQL.Test">
+            <summary>
+            Тест соединения с базой
+            </summary>
+            <returns>True - если все хорошо</returns>
+        </member>
+        <member name="M:Redage.SDK.MySQL.Query(MySql.Data.MySqlClient.MySqlCommand)">
+            <summary>
+            Выполнить запрос без ответа
+            </summary>
+            <param name="command">Передаем заранее составленную команду</param>
+        </member>
+        <member name="M:Redage.SDK.MySQL.Query(System.String)">
+            <summary>
+            Выполнить запрос без ответа
+            </summary>
+            <param name="command">Передаем команду в виде строки</param>
+        </member>
+        <member name="M:Redage.SDK.MySQL.QueryAsync(MySql.Data.MySqlClient.MySqlCommand)">
+            <summary>
+            Выполнить запрос без ответа
+            </summary>
+            <param name="command">Передаем заранее составленную команду</param>
+        </member>
+        <member name="M:Redage.SDK.MySQL.QueryAsync(System.String)">
+            <summary>
+            Выполнить запрос без ответа
+            </summary>
+            <param name="command">Передаем команду в виде строки</param>
+        </member>
+        <member name="M:Redage.SDK.MySQL.QueryRead(MySql.Data.MySqlClient.MySqlCommand)">
+            <summary>
+            Отправить запрос и считать ответ
+            </summary>
+            <param name="command">Передаем заранее составленную команду</param>
+            <returns>Ответ базы данных в формате таблицы</returns>
+        </member>
+        <member name="M:Redage.SDK.MySQL.QueryRead(System.String)">
+            <summary>
+            Отправить запрос и считать ответ
+            </summary>
+            <param name="command">Передаем команду в виде строки</param>
+            <returns>Ответ базы данных в формате таблицы</returns>
+        </member>
+        <member name="M:Redage.SDK.MySQL.QueryReadAsync(MySql.Data.MySqlClient.MySqlCommand)">
+            <summary>
+            Асинхронная версия Read
+            </summary>
+            <param name="command">Передаем заранее составленную команду</param>
+            <returns>Ответ базы данных в формате таблицы</returns>
+        </member>
+        <member name="M:Redage.SDK.MySQL.QueryReadAsync(System.String)">
+            <summary>
+            Асинхронная версия Read
+            </summary>
+            <param name="command">Передаем заранее составленную команду</param>
+            <returns>Ответ базы данных в формате таблицы</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.Get(System.String)">
+            <summary>
+            Находит и возвращает объект таймера
+            </summary>
+            <param name="id">Уникальный идентификатор таймера</param>
+            <returns>Объект таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.Start(System.Int32,System.Action)">
+            <summary>
+            Start() запускает таймер и возвращает случайный ID
+            </summary>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.Start(System.String,System.Int32,System.Action)">
+            <summary>
+            Start() запускает таймер с уникальным ID
+            </summary>
+            <exception>
+            Exception возникает при передаче уже существующего ID или значения null
+            </exception>
+            <param name="id">Уникальный идентификатор таймера</param>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.StartOnce(System.Int32,System.Action)">
+            <summary>
+            StartOnce() запускает таймер один раз и возвращает случайный ID
+            </summary>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.StartOnce(System.String,System.Int32,System.Action)">
+            <summary>
+            StartOnce() запускает таймер один раз и возвращает ID
+            </summary>
+            <exception>
+            Exception возникает при передаче уже существующего ID или значения null
+            </exception>
+            <param name="id">Уникальный идентификатор таймера</param>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.StartTask(System.Int32,System.Action)">
+            <summary>
+            StartTask() запускает таймер отдельной задачей и возвращает случайный ID
+            </summary>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.StartTask(System.String,System.Int32,System.Action)">
+            <summary>
+            StartTask() запускает таймер отдельной задачей и возвращает ID
+            </summary>
+            <exception>
+            Exception возникает при передаче уже существующего ID или значения null
+            </exception>
+            <param name="id">Уникальный идентификатор таймера</param>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.StartOnceTask(System.Int32,System.Action)">
+            <summary>
+            StartOnceTask() запускает таймер один раз отдельной задачей и возвращает случайный ID
+            </summary>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+        <member name="M:Redage.SDK.Timers.StartOnceTask(System.String,System.Int32,System.Action)">
+            <summary>
+            StartOnceTask() запускает таймер один раз отдельной задачей и возвращает ID
+            </summary>
+            <exception>
+            Exception возникает при передаче уже существующего ID или значения null
+            </exception>
+            <param name="id">Уникальный идентификатор таймера</param>
+            <param name="interval">Интервал срабатывания действия</param>
+            <param name="action">Лямбда-выражение с действием</param>
+            <returns>Уникальный ID таймера</returns>
+        </member>
+    </members>
+</doc>
